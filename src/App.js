@@ -1,41 +1,87 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
-import Homepage from "./pages/Home/HomePage";
+import HomePage from "./pages/Home/HomePage";
+import {Redirect, Route, Switch} from "react-router-dom";
+import ShopPage from "./pages/Shop/ShopPage";
+import Header from "./components/Header/Header";
+import SignPage from "./pages/SignPage/SignPage";
+import { auth, creatUserProfileDocument} from './firebase/firebase.utils';
+import {setCurrentUser} from "./redux/user/userActions";
+import {connect} from 'react-redux';
+import {createStructuredSelector} from 'reselect'
+import {selectCurrentUser} from "./redux/user/userSelectors";
+import CheckoutPage from "./pages/CheckoutPage/CheckoutPage";
+//    import ClassComp from "./components/ClassComp";
 
 
 
-function App() {
+
+function App({setCurrentUser, currentUser, collections}) {
+    // const Get = async () => {const userRef =  firestore.doc(`users/BA3OPnhnbqgk8AupyOTQt6ruB5Q2`);
+    //     const snapShot = await userRef.get();
+    //     console.log("App - GET ", snapShot, '\n', userRef);
+    // };
+    console.log ('App RENDER');
+
+
+    useEffect(  () => {
+       // Get();
+        let onsubscribeFromSnapshot;
+        let onsubscribeFromAuth = auth.onAuthStateChanged( async userAuth => {
+           if (userAuth) {
+              let userRef = await creatUserProfileDocument(userAuth);
+               onsubscribeFromSnapshot = userRef.onSnapshot( snapShot => {
+                  setCurrentUser({ id: snapShot.id, ...snapShot.data() })
+              });
+
+           } else {
+               setCurrentUser(null);
+           }
+
+        });
+        return () => {
+            console.log('App Return' );
+            if (typeof onsubscribeFromSnapshot === 'function') onsubscribeFromSnapshot();
+            if (typeof onsubscribeFromAuth === 'function')onsubscribeFromAuth();
+        };
+        //eslint-disable-next-line
+    }, []);
+
+
   return (
-    <div >
-        <Homepage />
-    </div>
+      <div className={`App`}>
+
+          {/*<Route path={`/test`}  component={ClassComp}/>*/}
+          <Header  />
+          <Switch>
+              <Route exact  path='/' component={HomePage} />
+              <Route path='/shop' component={ShopPage} />
+              <Route exact  path='/checkout' component={CheckoutPage} />
+
+              <Route exact path='/signin' render={
+                  ()=> currentUser ? (<Redirect to='/' />) : (<SignPage/>)}
+              />
+
+          </Switch>
+
+      </div>
   );
 }
 
+const mapStateToProps = createStructuredSelector({
+    currentUser: selectCurrentUser,
+ });
 
-//
-// import  { Component } from 'react';
-// class App extends Component {
-//     state = {
-//         text: ''
-//     };
-//   onChange = e => {
-//         this.setState({text: e.target.value});
-//   };
-//  render() {
-//      console.log("App");
-//      return (
-//    <div>
-//        Search
-//        <input type='search' onChange={this.onChange} />
-//        Text
-//        <input type='text' onChange={this.onChange} />
-//        <div>
-//            State: {this.state.text}
-//        </div>
-//    </div>
-//   );
-//  }
-// }
 
-export default App;
+
+
+
+const mapDispatchToProps = (dispatch, getState) => {
+     //console.log('APP mapDispatchToProps');
+    return {
+        setCurrentUser: user => dispatch(setCurrentUser(user))
+    }
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
