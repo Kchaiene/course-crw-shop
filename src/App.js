@@ -6,7 +6,7 @@ import ShopPage from "./pages/Shop/ShopPage";
 import Header from "./components/Header/Header";
 import SignPage from "./pages/SignPage/SignPage";
 import { auth, creatUserProfileDocument} from './firebase/firebase.utils';
-import {setCurrentUser} from "./redux/user/userActions";
+import {checkUserSession, setCurrentUser} from "./redux/user/userActions";
 import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect'
 import {selectCurrentUser} from "./redux/user/userSelectors";
@@ -16,36 +16,39 @@ import CheckoutPage from "./pages/CheckoutPage/CheckoutPage";
 
 
 
-function App({setCurrentUser, currentUser, collections}) {
+function App({ currentUser, collections, dispatch }) {
     // const Get = async () => {const userRef =  firestore.doc(`users/BA3OPnhnbqgk8AupyOTQt6ruB5Q2`);
     //     const snapShot = await userRef.get();
     //     console.log("App - GET ", snapShot, '\n', userRef);
     // };
     console.log ('App RENDER');
-
-
     useEffect(  () => {
-       // Get();
-        let onsubscribeFromSnapshot;
-        let onsubscribeFromAuth = auth.onAuthStateChanged( async userAuth => {
-           if (userAuth) {
-              let userRef = await creatUserProfileDocument(userAuth);
-               onsubscribeFromSnapshot = userRef.onSnapshot( snapShot => {
-                  setCurrentUser({ id: snapShot.id, ...snapShot.data() })
-              });
+        dispatch(checkUserSession());
+    }, [] );
 
-           } else {
-               setCurrentUser(null);
-           }
+    // useEffect(  () => {
+    //    // Get();
+    //     let onsubscribeFromSnapshot;
 
-        });
-        return () => {
-            console.log('App Return' );
-            if (typeof onsubscribeFromSnapshot === 'function') onsubscribeFromSnapshot();
-            if (typeof onsubscribeFromAuth === 'function')onsubscribeFromAuth();
-        };
-        //eslint-disable-next-line
-    }, []);
+    //     let onsubscribeFromAuth = auth.onAuthStateChanged( async userAuth => {
+    //        if (userAuth) {
+    //           let userRef = await creatUserProfileDocument(userAuth);
+    //           onsubscribeFromSnapshot = userRef.onSnapshot( snapShot => {
+    //               setCurrentUser({ id: snapShot.id, ...snapShot.data() })
+    //           });
+    //
+    //        } else {
+    //            setCurrentUser(null);
+    //        }
+    //
+    //     });
+    //     return () => {
+    //         console.log('App Return' );
+    //         if (typeof onsubscribeFromSnapshot === 'function') onsubscribeFromSnapshot();
+    //         if (typeof onsubscribeFromAuth === 'function')onsubscribeFromAuth();
+    //     };
+    //     //eslint-disable-next-line
+    // }, []);
 
 
   return (
@@ -76,12 +79,12 @@ const mapStateToProps = createStructuredSelector({
 
 
 
-const mapDispatchToProps = (dispatch, getState) => {
-     //console.log('APP mapDispatchToProps');
-    return {
-        setCurrentUser: user => dispatch(setCurrentUser(user))
-    }
-};
+// const mapDispatchToProps = (dispatch, getState) => {
+//      //console.log('APP mapDispatchToProps');
+//     return {
+//         setCurrentUser: user => dispatch(setCurrentUser(user))
+//     }
+// };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, )(App);

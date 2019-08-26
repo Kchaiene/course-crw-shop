@@ -29,6 +29,15 @@ export const fetchCollections = () => async (dispatch) => {
         });
     }
 };
+export const fetchCollectionsSuccess = collectionsMap => ({
+    type: ShopActionTypes.FETCH_COLLECTIONS_SUCCESS,
+    payload: collectionsMap
+});
+export const fetchCollectionsFailure = e => ({
+    type: ShopActionTypes.FETCH_COLLECTIONS_FAILURE,
+    payload: e
+});
+
 
 // export const fetchCollections = () => {console.log('fetchCollections'); return (dispatch) => {
 //     console.log('fetchCollections = 2', dispatch);

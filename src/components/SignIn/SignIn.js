@@ -3,21 +3,20 @@ import InputForm from "../InputForm/InputForm";
 import './signIn.scss';
 import CustomButton from "../CustomButton/CustomButton";
 import {auth, signInWithGoogle} from '../../firebase/firebase.utils';
+import {connect} from 'react-redux';
+import {emailSignInStart, googleSignInStart} from "../../redux/user/userActions";
 
 
-const SignIn = () => {
+
+const SignIn = props => {
+    const {dispatch} = props;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const setKeyObj = { email: setEmail, password: setPassword};
 
-    const onSubmit = async e =>{
+    const onSubmit =  e =>{
         e.preventDefault();
-        try{
-            await auth.signInWithEmailAndPassword(email, password);
-            setEmail(''); setPassword('');
-        }catch (e) {
-            console.log('ERROR SIGN-IN', e);
-        }
+        dispatch(emailSignInStart({ email, password }) );
     };
 
     const onChange = e => {
@@ -25,11 +24,10 @@ const SignIn = () => {
         setKeyObj[name](value);
     };
 
-    const onClick = async e =>{
-        e.preventDefault();
-        signInWithGoogle();
+    const onGoogleSigIn = async e =>{
+       // e.preventDefault();
+        dispatch(googleSignInStart());
     };
-    //console.log('SignIN', password, email);
 
     return (
         <div className='sign-in'>
@@ -46,7 +44,7 @@ const SignIn = () => {
                            label='Password' required />
             <div className='buttons'>
                 <CustomButton type='submit'  >Sign In </CustomButton>
-                <CustomButton onClick={onClick} customType ={'google'} > Sign In with Google </CustomButton>
+                <CustomButton type='button' onClick={onGoogleSigIn} customType ={'google'} > Sign In with Google </CustomButton>
             </div>
 
 
@@ -57,4 +55,4 @@ const SignIn = () => {
     );
 };
 
-export default SignIn;
+export default connect(null)(SignIn);

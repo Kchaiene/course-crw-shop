@@ -1,15 +1,21 @@
 import React from 'react';
 import CollectionItem from "../CollectionItem/CollectionItem";
-// import './CollectionPreview.scss';
 import './collection-preview.styles.scss';
+import {NavLink, withRouter} from "react-router-dom";
 
 
 
 const CollectionPreview = (props) => {
-    const {title, items} = props;
+    const {match, collection} = props;
+    const {title, items, routeName} = props.collection;
+
     return (
         <div className='collection-preview' >
-            <h1 className='title' >{title.toUpperCase()}</h1>
+            <h1 className='title' >
+                <NavLink to={`${match.path}/${routeName}`}>
+                    {title.toUpperCase()}
+                </NavLink>
+            </h1>
             <div className='preview' >
                 { items
                     .filter( (item, indx) => indx < 4  )
@@ -22,4 +28,4 @@ const CollectionPreview = (props) => {
     );
 };
 
-export default CollectionPreview;
+export default withRouter(CollectionPreview);

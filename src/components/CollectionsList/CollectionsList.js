@@ -11,8 +11,8 @@ const CollectionsList = (props) => {
 
     return (
         <div className='collections-list'>
-            {collections ? collections.map( ({id, ...otherCollectionProps}) => (
-                <CollectionPreview key={id} {...otherCollectionProps} />
+            {collections ? collections.map( (collection) => (
+                <CollectionPreview key={collection.id} collection={collection} />
             )) : null }
         </div>
     );

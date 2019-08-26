@@ -9,18 +9,16 @@ import CartDropdown from "../CartDropdown/CartDropdown";
 import {selectCurrentUser} from "../../redux/user/userSelectors";
 import {selectCartHidden} from "../../redux/cart/cartSelectors";
 import {HeaderContainer, LogoContainer, OptionNavLink, OptionsContainer} from "./Header.styles";
+import {signOutStart} from "../../redux/user/userActions";
 
 
 
 
-const Header = ({currentUser, hidden}) => {
-    // On SIGN OUT
-    const onClick = async e =>{
-        try {
-            await auth.signOut();
-        }catch (e) {
-            console.log("ERROR SIGN OUT", e);
-        }
+const Header = props => {
+    const {currentUser, hidden, dispatch} = props;
+
+    const onSignOut = e =>{
+       dispatch(signOutStart());
     };
 
     return (
@@ -30,12 +28,12 @@ const Header = ({currentUser, hidden}) => {
                 <Logo />
             </LogoContainer>
             <OptionsContainer >
-                <OptionNavLink as='div' onClick={onClick}> FoRCE SIGN OUT!!!! </OptionNavLink>
+                <OptionNavLink as='div' onClick={onSignOut}> FoRCE SIGN OUT!!!! </OptionNavLink>
                 <OptionNavLink to='/shop'  >SHOP</OptionNavLink>
                 <OptionNavLink to='/contact'  >CONTACT</OptionNavLink>
 
                 { currentUser ?
-                    (<OptionNavLink as='div' onClick={onClick}> SIGN OUT </OptionNavLink>)
+                    (<OptionNavLink as='div' onClick={onSignOut}> SIGN OUT </OptionNavLink>)
                     : ( <OptionNavLink to='/signin' className='option' >SIGN IN</OptionNavLink>
                 )}
 

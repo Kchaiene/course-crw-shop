@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Route} from "react-router-dom";
 import {connect} from 'react-redux';
-import {fetchCollections} from "../../redux/shop/shopActions";
+import {fetchCollections, fetchCollectionsStart} from "../../redux/shop/shopActions";
 import CollectionsListContainer from "../../components/CollectionsList/CollectionsListContainer";
 import CollectionsPageContainer from "../../components/CollectionPage/CollectionsPageContainer";
 import shopActionTypes from "../../redux/shop/shopTypesAction";
@@ -10,12 +10,11 @@ import shopActionTypes from "../../redux/shop/shopTypesAction";
 
 
 const ShopPage = (props) => {
-    const {match,  fetchCollections} = props;
-
-    console.log('ShopPage', props);
+    const {match, collections, fetchCollectionsStart} = props;
 
     useEffect(() => {
-        fetchCollections();
+        if (collections) return;
+        fetchCollectionsStart();
         //eslint-disable-next-line
     }, []);
 
@@ -31,17 +30,10 @@ const ShopPage = (props) => {
 
 
 const mapDispatchToProps = {
-    fetchCollections
+    fetchCollectionsStart
 };
-//bindActionCreators();
+const mapStateToProps = (state) => ({
+    collections: state.shop.collections
+});
 
-// const mapDispatchToProps2 = dispatch =>({
-//     fetchCollections: () => dispatch(fetchCollections())
-// });
-// const mapDispatchToProps3 = dispatch =>({
-//     fetchCollections: fetchCollections
-// });
-// const mapDispatchToProps4 = {
-//     type: shopActionTypes.FETCH_COLLECTIONS_START
-// };
-export default connect(null, mapDispatchToProps)(ShopPage);
+export default connect(mapStateToProps, mapDispatchToProps)(ShopPage);
