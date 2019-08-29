@@ -1,16 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import StripeCheckout from 'react-stripe-checkout'
-
+import axios from 'axios';
 
 
 const StripeButton = props => {
     const {price} = props;
     const priceForStripe = price * 100;
-    const piblishableKey = `pk_test_MIq8vQqDK1he0QInjUpaFEhS00yUKdm9bk`
+    const piblishableKey = `pk_test_MIq8vQqDK1he0QInjUpaFEhS00yUKdm9bk`;
 
-    const onToken = token=>{
-        console.log('StripeButton', token);
+    const onToken = async token=>{
+        try {
+            const res = await axios({
+                url:'payment',
+                method: 'post',
+                data: {
+                    amount:priceForStripe,
+                    token
+                }
+            });
+            alert("Payment SUCCESS!!")
+        } catch (e) {
+            console.error('Error => StripeButton onToken', e);
+            alert('Error');
+        }
     };
 
     return (
@@ -26,7 +39,6 @@ const StripeButton = props => {
             stripeKey={piblishableKey}
             token={onToken}
         />
-
 
     );
 };

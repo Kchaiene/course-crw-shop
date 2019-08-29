@@ -10,9 +10,10 @@ import {signUpStart} from "../../redux/user/userActions";
 
 const SignUp = (props) => {
     const [formData, setFormData] = useState({
-        displayName:'', email: '', password:'', confirmPassword:''});
+        displayName:'', email: '', password:'', confirmPassword:''
+    });
     const {displayName, email, password, confirmPassword} = formData;
-    const {dispatch} =props;
+    const {dispatch} = props;
 
 
     const onSubmit =  e => {

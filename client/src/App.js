@@ -11,7 +11,7 @@ import {connect} from 'react-redux';
 import {createStructuredSelector} from 'reselect'
 import {selectCurrentUser} from "./redux/user/userSelectors";
 import CheckoutPage from "./pages/CheckoutPage/CheckoutPage";
-//    import ClassComp from "./components/ClassComp";
+import FunctionComp from "./components/FunctionComp";
 
 
 
@@ -22,6 +22,7 @@ function App({ currentUser, collections, dispatch }) {
     //     console.log("App - GET ", snapShot, '\n', userRef);
     // };
     console.log ('App RENDER');
+
     useEffect(  () => {
         dispatch(checkUserSession());
     }, [] );
@@ -54,7 +55,7 @@ function App({ currentUser, collections, dispatch }) {
   return (
       <div className={`App`}>
 
-          {/*<Route path={`/test`}  component={ClassComp}/>*/}
+          <Route path={`/test`}  component={FunctionComp}/>
           <Header  />
           <Switch>
               <Route exact  path='/' component={HomePage} />
