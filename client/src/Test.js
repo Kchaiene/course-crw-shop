@@ -33,3 +33,5 @@ alert(selB(obj1));
 alert(selB(obj1));
 
 module.exports = 1;
+
+//   "proxy": "http://localhost:5000",

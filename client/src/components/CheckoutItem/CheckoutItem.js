@@ -1,21 +1,24 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import PropTypes from 'prop-types';
 import './checkoutItem.scss';
 import {connect} from'react-redux';
 import {addItemToCart, clearItemFromCart, removeItemFromCart} from "../../redux/cart/cartActions";
+import {CartContext} from "../../providers/cart/cartProvider";
 
 
-const CheckoutItem = ({item, dispatch}) => {
+const CheckoutItem = ({item}) => {
     const {imageUrl, price, name, quantity} = item;
+    const { removeItem, addItem, clearItem} = useContext(CartContext);
 
-    const onRemove = e => {
-        dispatch(clearItemFromCart(item));
+
+    const onClear = e => {
+        clearItem(item);
     };
     const onIncrease = e => {
-        dispatch(addItemToCart(item));
+        addItem(item);
     };
     const onDecrease = e => {
-        dispatch(removeItemFromCart(item));
+        removeItem(item);
     };
 
 
@@ -31,7 +34,7 @@ const CheckoutItem = ({item, dispatch}) => {
                 <div className='arrow' onClick={onIncrease}>&#10095;</div>
             </span>
             <span className='price'>{price}</span>
-            <div className='remove-button' onClick={onRemove}>
+            <div className='remove-button' onClick={onClear}>
                 &#10005;
             </div>
         </div>
@@ -42,4 +45,4 @@ CheckoutItem.propTypes = {
     item:PropTypes.object,
 };
 
-export default connect()(CheckoutItem);
+export default CheckoutItem;

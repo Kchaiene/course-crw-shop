@@ -12,6 +12,7 @@ import {createStructuredSelector} from 'reselect'
 import {selectCurrentUser} from "./redux/user/userSelectors";
 import CheckoutPage from "./pages/CheckoutPage/CheckoutPage";
 import FunctionComp from "./components/FunctionComp";
+import CurrentUserContext from "./context/currentUser/currentUserContext";
 
 
 
@@ -56,7 +57,10 @@ function App({ currentUser, collections, dispatch }) {
       <div className={`App`}>
 
           <Route path={`/test`}  component={FunctionComp}/>
-          <Header  />
+          <CurrentUserContext.Provider value={currentUser} >
+              <Header />
+          </CurrentUserContext.Provider>
+
           <Switch>
               <Route exact  path='/' component={HomePage} />
               <Route path='/shop' component={ShopPage} />
