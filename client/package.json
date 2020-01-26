@@ -14,13 +14,14 @@
     "react-scripts": "3.0.1",
     "react-stripe-checkout": "^2.6.3",
     "redux": "^4.0.4",
-    "redux-devtools-extension": "^2.13.8",
-    "redux-logger": "^3.0.6",
     "redux-persist": "^5.10.0",
     "redux-saga": "^1.0.5",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "styled-components": "^4.3.2"
+  },
+  "devDependencies": {
+    "redux-devtools-extension": "^2.13.8"
   },
   "scripts": {
     "start": "react-scripts start",

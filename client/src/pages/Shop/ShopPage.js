@@ -1,16 +1,17 @@
 import React, {useEffect} from 'react';
 import {Route} from "react-router-dom";
 import {connect} from 'react-redux';
-import {fetchCollections, fetchCollectionsStart} from "../../redux/shop/shopActions";
+import {fetchCollectionsStart} from "../../redux/shop/shopActions";
 import CollectionsListContainer from "../../components/CollectionsList/CollectionsListContainer";
 import CollectionsPageContainer from "../../components/CollectionPage/CollectionsPageContainer";
-import shopActionTypes from "../../redux/shop/shopTypesAction";
 
 
 
 
 const ShopPage = (props) => {
     const {match, collections, fetchCollectionsStart} = props;
+
+    console.log("ShopPage render", match);
 
     useEffect(() => {
         if (collections) return;

@@ -5,10 +5,12 @@ import {selectCollectionId} from "../../redux/shop/shopSelectors";
 import {NavLink} from "react-router-dom/";
 import CollectionItem from "../CollectionItem/CollectionItem";
 import './collectionPage.scss';
+import CollectionsPageContainer from "./CollectionsPageContainer";
+import {Route} from "react-router-dom";
 
 
-const CollectionPage = (props ) => {
-    const {collection} = props;
+const CollectionPage = (props) => {
+    const {collection, match} = props;
     if (collection === void 0 || collection === null )  return ( <div className='error not-found'>Not Found</div> );
     const {title, items} = collection;
 
@@ -26,6 +28,9 @@ const CollectionPage = (props ) => {
                 <NavLink to={`/shop/mens`} > TO MEANS</NavLink>
                 <NavLink to={`/shop/hats`} > TO HATS</NavLink>
             </div>
+
+            <Route  path={`${match.path}/:RRRId`} render={({match})=>{console.log("RRRId", match); return <div>RRRRRRR</div>}} />
+
         </div>
     );
 };
@@ -34,9 +39,11 @@ CollectionPage.propTypes = {
     collection: PropTypes.object,
 };
 
-const mapStateToProps = (state, {match:{params}}) => ({
+const mapStateToProps = (state, {match:{params}}) => {
+    console.log("CollectionPage selector", params);
+    return ({
     collection: selectCollectionId(params.collectionId)(state)
-});
+})};
 
 export default connect(mapStateToProps)(CollectionPage);
 
